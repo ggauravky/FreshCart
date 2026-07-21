@@ -1,6 +1,6 @@
-import { BikeIcon, ChevronDownIcon, MenuIcon, SearchIcon, ShoppingCartIcon, XIcon } from "lucide-react";
+import { BikeIcon, ChevronDownIcon, MapPinIcon, MenuIcon, PackageIcon, SearchIcon, ShoppingCartIcon, UserIcon, XIcon , ArrowUpRightIcon, ShieldIcon, LogOutIcon } from "lucide-react";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
     const user:any = {name:"Gaurav", email:"gaurav@example.com",isAdmin:true}
@@ -10,10 +10,9 @@ const Navbar = () => {
     };
     const [searchQuery, setSearchQuery] = useState("");
     const [userMenuOpen, setUserMenuOpen] = useState(false);
-    const navigate = useNavigate();
   return (
     <nav className="bg-white sticky top-0 z-50 border-b border-app-border">
-        <div className="max-w-7xl max-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 gap-4">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 gap-4">
             {/* {Logo} */}
             <Link to="/" className="flex items-center gap-2 text-[22px] font-medium shrink-0">
                 <BikeIcon size={24} /> FreshCart
@@ -28,7 +27,7 @@ const Navbar = () => {
                 {/* {search bar} */}
                 <form className="hidden sm:flex flex-1 max-w-sm text-xs sm:text-sm">
                     <div className="relative w-full">
-                        <SearchIcon className="absolute left-2.5 top-1/2-translate-y-1/2 size-4 text-zinc-500" />
+                        <SearchIcon className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-zinc-500" />
                         <input
                             type="text"
                             placeholder="Search products..."
@@ -49,7 +48,7 @@ const Navbar = () => {
                     {/* "user" */}
                     <div className="relative">
                         {user ? (
-                            <button className="flex items-center gap-2 p-2">
+                            <button onClick={() => setUserMenuOpen(!userMenuOpen)} className="flex items-center gap-2 p-2">
                                 <div className="size-7 rounded-full bg-green-950 text-white flex-center">
                                     {user.name.charAt(0).toUpperCase()}
                                 </div>
@@ -58,7 +57,7 @@ const Navbar = () => {
                         )
                         :(
                             <div className="flex-center gap-2">
-                                <Link to="/login" className="hidden md:flex item-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-950 rounded-full hover:bg-green-950-light transition-colors">Login</Link>
+                                <Link to="/login" className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-950 rounded-full hover:bg-green-950-light transition-colors">Login</Link>
                                 {userMenuOpen ? <XIcon className="md:hidden" onClick={()=>setUserMenuOpen(!userMenuOpen)}/> :<MenuIcon className="md:hidden" onClick={()=>setUserMenuOpen(!userMenuOpen)}/>}
                             </div>
                         )}
@@ -66,8 +65,13 @@ const Navbar = () => {
                         {userMenuOpen && (
                             <>
 
-                            <div className="fixed insert-0 z-40" onClick={()=>setUserMenuOpen(false)}/>
-                            <div className="absolute right-0 mt-2.5 w-56 bg-white rounded-xl shadow--lg border border-app-border py-2 z-50 animate-fade-in">
+                            <button
+                                type="button"
+                                aria-label="Close user menu"
+                                className="fixed inset-0 z-40"
+                                onClick={() => setUserMenuOpen(false)}
+                            />
+                            <div className="absolute right-0 mt-2.5 w-56 bg-white rounded-xl shadow-lg border border-app-border py-2 z-50 animate-fade-in">
                                     {user &&(
                                         <div className="px-4 py-2 border-b border-app-border">
                                                 <p className="text-sm font-medium text-zinc-900">
@@ -77,9 +81,33 @@ const Navbar = () => {
                                                     {user?.email}
                                                 </p>
                                         </div>
-                                    )
+                                    )}
+                                    <div>
+                                        {!user && <Link to='/login' onClick={() => setUserMenuOpen(false)} className="dropdown-link"><UserIcon size={16}/>Sign In</Link>}
 
-                                    }
+                                        {user && <Link to='/orders' onClick={() => setUserMenuOpen(false)} className="dropdown-link"><PackageIcon size={16}/>My Orders</Link>}
+
+                                        {user && <Link to='/addresses' onClick={() => setUserMenuOpen(false)} className="dropdown-link"><MapPinIcon size={16}/>My Addresses</Link>}
+
+                                        <Link to='/products' onClick={() => setUserMenuOpen(false)} className="dropdown-link md:hidden"><ArrowUpRightIcon size={16}/>My Products</Link>
+
+                                        <Link to='/deals' onClick={() => setUserMenuOpen(false)} className="dropdown-link md:hidden"><ArrowUpRightIcon size={16}/>My Deals</Link>
+                                        {user?.isAdmin && (
+                                            <Link to='/admin/products' onClick={() => setUserMenuOpen(false)} className="dropdown-link"><ShieldIcon size={16}/>
+                                            <span className="text-app-orange-dark">
+                                                Admin Panel
+                                            </span>
+                                            </Link>
+                                        )}
+                                        {user &&
+                                        <div className="border-t border-app-border pt-1">
+                                            <button onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-app-error hover:bg-red-50 w-full transition-colors">
+                                                <LogOutIcon size={16}/>
+                                            </button>
+                                        </div>
+                                        }
+
+                                    </div>
                             </div>
                             
                             </>
