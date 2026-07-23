@@ -5,7 +5,11 @@ import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
     const navigate = useNavigate();
-    const user:any = null;
+    const user:any = {
+        name: "Gaurav Kumar Yadav",
+        email: "gaurav.yadav@example.com",
+        isAdmin: true
+    };
     const {cartCount , setIsCartOpen} = {
         cartCount: 5,
         setIsCartOpen: (_data:any) => {}
